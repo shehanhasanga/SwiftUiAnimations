@@ -16,8 +16,8 @@ struct EmojiArtApp: App {
     
     
     var body: some Scene {
-        WindowGroup {
-            EmojiArtDocumentView(document: document)
+        DocumentGroup(newDocument:{EmojiArtDocument()}) {config in
+            EmojiArtDocumentView(document: config.document)
                 .environmentObject(palatteStore)
         }
     }

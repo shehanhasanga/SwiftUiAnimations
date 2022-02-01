@@ -10,6 +10,7 @@ import SwiftUI
 
 struct EmojiArtDocumentView: View {
     @ObservedObject var document: EmojiArtDocument
+    @Environment(\.undoManager) var undomanager: UndoManager?
     
     let defaultEmojiFontSize: CGFloat = 40
     
@@ -58,6 +59,11 @@ struct EmojiArtDocumentView: View {
             .onReceive(document.$backgroundImage) { image in
                 zoomToFit(image , in: geometry.size)
             }
+            .toolbar {
+                UndoButton{
+                    
+                }
+            }
         }
     }
     
@@ -74,12 +80,12 @@ struct EmojiArtDocumentView: View {
     
     private func drop(providers: [NSItemProvider], at location: CGPoint, in geometry: GeometryProxy) -> Bool {
         var found = providers.loadObjects(ofType: URL.self) { url in
-            document.setBackground(.url(url.imageURL))
+            document.setBackground(.url(url.imageURL), undomanager: undomanager)
         }
         if !found {
             found = providers.loadObjects(ofType: UIImage.self) { image in
                 if let data = image.jpegData(compressionQuality: 1.0) {
-                    document.setBackground(.imageData(data))
+                    document.setBackground(.imageData(data), undomanager: undomanager)
                 }
             }
         }
@@ -90,6 +96,7 @@ struct EmojiArtDocumentView: View {
                         String(emoji),
                         at: convertToEmojiCoordinates(location, in: geometry),
                         size: defaultEmojiFontSize / zoomScale
+                        , undomanager: undomanager
                     )
                 }
             }

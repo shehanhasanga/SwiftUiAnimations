@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct PalatteChooser: View {
-    var emojiFontSize: CGFloat = 40
+    @ScaledMetric var emojiFontSize: CGFloat = 40
     @EnvironmentObject var store:PaletteStore
     let testEmojis = "😀😷🦠💉👻👀🐶🌲🌎🌞🔥🍎⚽️🚗🚓🚲🛩🚁🚀🛸🏠⌚️🎁🗝🔐❤️⛔️❌❓✅⚠️🎶➕➖🏳️"
-    @State private var choosenIndex :Int = 0
+    @SceneStorage("PalatteChooser.choosenIndex") private var choosenIndex = 0
     var body: some View {
 //        let palatte = store.palette(at: choosenIndex)
         HStack{
@@ -32,6 +32,7 @@ struct PalatteChooser: View {
            
         }label:{
             Image(systemName: "paintpalette")
+                .font(.largeTitle)
         }
         .font(.system(size: 50))
         .contextMenu{contextMen}
